@@ -1,7 +1,7 @@
 import pandas as pd
 from flask import Flask, render_template, request
 from textblob import TextBlob
-from config import CLIENT_ID, CLIENT_SECRET # Import credentials from config.py
+# from config import CLIENT_ID, CLIENT_SECRET # Import credentials from config.py
 from flask import Flask, render_template, request, jsonify
 
 app = Flask(__name__)
