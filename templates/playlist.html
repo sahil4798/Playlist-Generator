@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Your Playlist</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <script>
+        async function loadMoreSongs() {
+            const mood = "{{ mood }}";
+            const response = await fetch("/load_more_songs", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/x-www-form-urlencoded",
+                },
+                body: `mood=${encodeURIComponent(mood)}`,
+            });
+
+            if (response.ok) {
+                const newSongs = await response.json();
+                const playlistDiv = document.querySelector(".playlist");
+
+                newSongs.forEach(song => {
+                    const songCard = document.createElement("div");
+                    songCard.className = "song-card";
+
+                    const songDetails = document.createElement("div");
+                    songDetails.className = "song-details";
+
+                    const songInfo = document.createElement("div");
+                    songInfo.className = "song-info";
+                    songInfo.innerHTML = `<strong>${song.track}</strong> by <em>${song.artist}</em>`;
+
+                    const spotifyLink = document.createElement("a");
+                    spotifyLink.className = "spotify-link";
+                    spotifyLink.href = song.spotify_link;
+                    spotifyLink.target = "_blank";
+                    spotifyLink.textContent = "Listen on Spotify";
+
+                    songDetails.appendChild(songInfo);
+                    songDetails.appendChild(spotifyLink);
+                    songCard.appendChild(songDetails);
+                    playlistDiv.appendChild(songCard);
+                });
+            } else {
+                alert("Failed to load more songs. Please try again.");
+            }
+        }
+    </script>
+</head>
+
+<body>
+    <!-- Navbar -->
+    <nav class="navbar">
+        <div class="navbar-container">
+            <a href="#" class="logo">MoodTune</a>
+            <div class="nav-links">
+                <a href="#">Home</a>
+                <a href="#">About</a>
+                <a href="#">Contact</a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+
+
+    <div class="card">
+        <h1>Your Playlist Based on "{{ mood }}"</h1>
+        <div class="playlist">
+            {% for song in playlist %}
+            <div class="song-card">
+                <div class="song-details">
+                    <div class="song-info">
+                        <strong>{{ song.track }}</strong> by <em>{{ song.artist }}</em>
+                    </div>
+                    <a href="{{ song.spotify_link }}" class="spotify-link" target="_blank">Listen on Spotify</a>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+
+        <!-- Button to load 5 more songs -->
+        <button onclick="loadMoreSongs()" class="load-more-btn">More Songs</button>
+
+        <!-- Button to generate another playlist -->
+        <form action="{{ url_for('home') }}">
+            <button type="submit">Generate Another Playlist</button>
+        </form>
+    </div>
+</body>
+
+</html>
