@@ -1,4 +1,5 @@
 # Emotion-Based Playlist Generator 🎵
+[![Visit MoodTune](https://img.shields.io/badge/Visit-MoodTune-blue?style=for-the-badge)](https://moodtune.aahil.online/)
 
 An emotion-based playlist generator that helps you create a playlist based on your mood. Users can sign up, log in, and input their current mood to get a curated Spotify playlist.
 
